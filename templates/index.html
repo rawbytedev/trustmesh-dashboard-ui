@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+  <title>TrustMesh Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+    let sock;
+    function connectWS() {
+      sock = new WebSocket(`ws://${location.host}/ws`);
+      sock.onmessage = (msg) => {
+        const data = JSON.parse(msg.data);
+        const list = document.getElementById("escrow-list");
+        list.innerHTML = "";
+        for (const row of data) {
+          const el = document.createElement("div");
+          el.className = "escrow-row";
+          el.innerHTML = `
+            <div class="left">
+              <strong>Escrow ${row.escrow_id}</strong>
+              <span class="pill">${row.event}</span>
+              <span class="meta">${renderMeta(row)}</span>
+            </div>
+            <div class="right">
+              <a class="btn" href="/escrow/${row.escrow_id}">Timeline</a>
+            </div>`;
+          list.appendChild(el);
+        }
+      };
+    }
+    function renderMeta(row) {
+      const e = row.event;
+      const d = row.data || {};
+      if (e === "EscrowCreated") {
+        return `buyer=${d.buyer} seller=${d.seller} amount=${d.amount} expectedBy=${d.expectedBy}`;
+      } else if (e === "ShipmentLinked") {
+        return `shipmentId=${d.shipmentId}`;
+      } else if (e === "FundsReleased") {
+        return `seller=${d.seller} shipmentId=${d.shipmentId} reason=${d.reason}`;
+      } else if (e === "FundsRefunded") {
+        return `buyer=${d.buyer} shipmentId=${d.shipmentId} reason=${d.reason}`;
+      } else if (e === "EscrowExtended") {
+        return `extendedUntil=${d.extendedUntil} shipmentId=${d.shipmentId} reason=${d.reason}`;
+      } else if (e === "EscrowExpired" || e === "EscrowCancelled") {
+        return `reason=${d.reason}`;
+      }
+      return "";
+    }
+    window.onload = connectWS;
+  </script>
+</head>
+<body>
+  <h1>Latest Escrow States</h1>
+  <div id="escrow-list">
+    {% for row in latest %}
+    <div class="escrow-row">
+      <div class="left">
+        <strong>Escrow {{ row.escrow_id }}</strong>
+        <span class="pill">{{ row.event }}</span>
+        <span class="meta">
+          {% if row.event == "EscrowCreated" %}
+          buyer={{ row.data.buyer }} seller={{ row.data.seller }} amount={{ row.data.amount }} expectedBy={{ row.data.expectedBy }}
+          {% elif row.event == "ShipmentLinked" %}
+          shipmentId={{ row.data.shipmentId }}
+          {% elif row.event == "FundsReleased" %}
+          seller={{ row.data.seller }} shipmentId={{ row.data.shipmentId }} reason={{ row.data.reason }}
+          {% elif row.event == "FundsRefunded" %}
+          buyer={{ row.data.buyer }} shipmentId={{ row.data.shipmentId }} reason={{ row.data.reason }}
+          {% elif row.event == "EscrowExtended" %}
+          extendedUntil={{ row.data.extendedUntil }} shipmentId={{ row.data.shipmentId }} reason={{ row.data.reason }}
+          {% elif row.event == "EscrowExpired" or row.event == "EscrowCancelled" %}
+          reason={{ row.data.reason }}
+          {% endif %}
+        </span>
+      </div>
+      <div class="right">
+        <a class="btn" href="/escrow/{{ row.escrow_id }}">Timeline</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

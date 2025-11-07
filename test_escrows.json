@@ -1,0 +1,53 @@
+{
+    "EscrowCreated":[
+        {
+            "escrow_id":1,
+            "buyer":"0x00",
+            "seller":"0x01",
+            "amount":100,
+            "expectedBy":3600
+
+        },
+        {
+            "escrow_id":2,
+            "buyer":"0x00",
+            "seller":"0x01",
+            "amount":1000,
+            "expectedBy":36000
+
+        },
+        {
+            "escrow_id":3,
+            "buyer":"0x00",
+            "seller":"0x01",
+            "amount":10,
+            "expectedBy":360
+
+        }
+    ],
+    "ShipmentLinked":[
+        {
+            "escrow_id":1,
+            "shipmentId":"ship01"
+        },
+        {
+            "escrow_id":2,
+            "shipmentId":"ship02"
+        }
+    ],
+    "EscrowExtended":[
+        {
+            "escrow_id":1,
+            "extendedUntil":12,
+            "shipmentId":"ship01",
+            "reason":"delay"
+        },
+        {
+            "escrow_id":2,
+            "extendedUntil":123,
+            "shipmentId":"ship02",
+            "reason":"failed query"
+        }
+    ]
+
+}

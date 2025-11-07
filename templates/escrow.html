@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <title>Escrow {{ escrow_id }} Timeline</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h2>Escrow {{ escrow_id }} Timeline</h2>
+  <div class="timeline">
+    {% for key, value in timeline.items() %}
+    <div class="tl-item">
+      <strong>{{ key }}</strong>
+      <pre>{{ value }}</pre>
+    </div>
+    {% endfor %}
+  </div>
+  <a class="btn" href="/">Back</a>
+</body>
+</html>
