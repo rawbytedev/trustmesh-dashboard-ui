@@ -1,4 +1,0 @@
-Improve the templates and css to render a good and simple Ui,
-Make sure to avoid breaking current logic,
-Do not improve python codes only suggest improvement but don't implement it
-on_event is deprecated change to the newest version

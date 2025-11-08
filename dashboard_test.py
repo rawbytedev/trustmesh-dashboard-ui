@@ -12,7 +12,7 @@ PREFIX = {
     "FundsRefunded" : "rf",
     "FundsReleased" : "rl",
 }
-def insertmultipleEscrow():
+def test_insert_multiple_escrow():
     db = DB()
     with open("test_escrows.json") as f:
         test_data = json.loads(f.read())
@@ -24,4 +24,3 @@ def insertmultipleEscrow():
             except Exception:
                 continue
     
-insertmultipleEscrow()
