@@ -9,7 +9,7 @@ class DBError(Exception):
     pass
 
 class DB:
-    def __init__(self, dsn="dbname=trustmesh.postgre user=postgres password=secret"):
+    def __init__(self, dsn=""):
         """
         dsn: Postgres connection string, e.g. from os.environ["DATABASE_URL"]
         """
